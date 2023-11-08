@@ -1,7 +1,7 @@
 # EvaDB-StockMarket
 
 ### Background
-The project "Integrating Real-time Stock Analysis and AI-driven Insights with EvaDB" focused on leveraging EvaDB to provide users with real-time stock data and enhanced analysis capabilities. The implemented features included real-time and historical stock price queries, as well as a stock prediction model. The project aimed to bridge the gap between traditional stock market analysis and AI-driven insights, providing users with valuable tools for informed decision-making.
+This integration focuses on leveraging EvaDB to provide users with real-time stock data and stock price analysis functionality. The currently implemented features include real-time and historical stock price queries, as well as a stock price forecasting model. The project aims to bridge the gap between traditional stock market analysis and AI-driven insights.
 
 ### Usage
 Install the dependencies:
