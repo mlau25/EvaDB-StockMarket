@@ -1,9 +1,10 @@
 import evadb
 import psycopg2
+import pandas as pd
 from tabulate import tabulate  # Ensure you have the tabulate library installed
 import datetime
 import stock_analysis
-
+import openai
 
 # Database connection parameters
 db_params = {
@@ -20,11 +21,45 @@ db_params = {
 cursor = evadb.connect().cursor()
 
 # SQL command to fetch all data from the stock_data table
-select_data_sql = "USE postgres_stock_data {SELECT * FROM stock_data WHERE stock_symbol = 'GOOG' LIMIT 10}"
+select_data_sql = "USE postgres_stock_data {SELECT * FROM stock_data WHERE stock_symbol = 'GOOGL' LIMIT 10}"
 
 # Execute the SQL command
 # print(cursor.query(select_data_sql).df())
 # print(cursor.query("SHOW FUNCTIONS;").df())
+
+# OPENAI STUFF
+print("OpenAI stuff")
+
+client = openai.OpenAI(
+    api_key='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',
+)
+
+messages = [ {"role": "system", "content":  
+              "You are an intelligent assistant."} ]
+
+# while True: 
+#     message = input("User : ")
+#     if message == "exit":
+#         break
+#     elif message: 
+#         messages.append( 
+#             {"role": "user", "content": message}, 
+#         ) 
+#         chat = client.chat.completions.create( 
+#             model="gpt-3.5-turbo", messages=messages 
+#         ) 
+#     reply = chat.choices[0].message.content 
+#     print(f"ChatGPT: {reply}") 
+#     messages.append({"role": "assistant", "content": reply})
+
+
+qTSLA = "USE postgres_stock_data {SELECT * FROM stock_data WHERE stock_symbol = 'TSLA' LIMIT 10}"
+
+tslaLast10 = cursor.query(qTSLA).df()
+
+# print(tslaLast10)
+
+exit()
 
 print("AI STUFF")
 # df = cursor.query("SELECT StockPriceForecast(30) ORDER BY DATE DESC LIMIT 50;").df()
