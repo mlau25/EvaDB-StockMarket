@@ -9,6 +9,8 @@ user_commands = {
     'query': "Query the most recent price(s) of a stock",
     'forecast': "View price forecasts of a stock",
     'news': "Request a news digest for a stock",
+    'compare': "Request a report on a comparison between two stocks",
+    'analysis': "Request an analysis report on a specific stock",
 }
 
 def stock_query_session():
@@ -37,8 +39,14 @@ def stock_query_session():
             execute_forecast()
         
         elif next_command == 'news':
-            print("Currently not implemented")
+            prepare_digest()
         
+        elif next_command == 'analysis':
+            prepare_analysis()
+
+        elif next_command == 'compare':
+            prepare_comparison()
+
         else:
             print("Invalid command, below are the supported user commands:")
             display_options
@@ -61,6 +69,9 @@ def setup():
     print("Connecting to Postgres:", end='\t')
     stock_analysis.reset_all_postgres()
     stock_analysis.reset_all_eva()
+    print("DONE")
+    time.sleep(0.2)
+    print("Setting up Database:", end='\t')
     stock_analysis.setup_database()
     print("DONE")
     time.sleep(0.2)
@@ -132,6 +143,37 @@ def execute_forecast():
 
     queryDF = stock_analysis.forecast_price(stock, horizon, indicator)
     print(queryDF)
+
+def prepare_digest():
+    news_digest = stock_analysis.create_digest()
+    print(news_digest)
+
+def prepare_analysis():
+    # gather user input on desired stock to generate news digest on
+    stock = input("Choose a stock (input ticker):\n\t=> ").upper()
+    while stock not in stock_analysis.stocks:
+        print("Stock ticker is not currently stored, try again.")
+        stock = input("Choose a stock (ticker):\n\t=> ").upper()
+
+    report = stock_analysis.create_analysis_report(stock)
+    print(report)
+
+def prepare_comparison():
+    # gather user input on desired stocks to generate comparison report on
+    stock1 = input("Choose a first stock (input ticker):\n\t=> ").upper()
+    while stock1 not in stock_analysis.stocks:
+        print("Stock ticker is not currently stored, try again.")
+        stock1 = input("Choose a first stock (ticker):\n\t=> ").upper()
+    stock2 = input("Choose a second stock (input ticker):\n\t=> ").upper()
+    while stock2 not in stock_analysis.stocks or stock2 == stock1:
+        if stock2 not in stock_analysis.stocks:
+            print("Stock ticker is not currently stored, try again.")
+        else:
+            print(f"Second stock cannot be the same as the first ({stock1})")
+        stock2 = input("Choose a second stock (ticker):\n\t=> ").upper()
+
+    report = stock_analysis.create_comparison_report(stock1, stock2)
+    print(report)
 
 if __name__ == '__main__':
     stock_query_session()
